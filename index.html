@@ -1,63 +1,47 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chat Assistant</title>
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap"
-      rel="stylesheet"
-    />
+
+    <title>L'Oréal Beauty Assistant</title>
+
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
-    <div class="page-wrapper">
-      <!------- Header / Branding ------->
-      <header class="site-header">
-        <h1 class="site-title">Smart Product Advisor</h1>
-      </header>
+    <header>
+      <img src="loreal-logo.png" alt="L'Oréal Logo" />
 
-      <!------- Chat Area ------->
-      <main>
-        <section class="chatbox">
-          <div id="chatWindow" class="chat-window">
-            <!-- messages will be appended here via JS -->
-          </div>
+      <h1>L'Oréal Beauty Assistant</h1>
 
-          <form id="chatForm" class="chat-form">
-            <label for="userInput" class="visually-hidden">Message</label>
-            <input
-              id="userInput"
-              name="userInput"
-              type="text"
-              placeholder="Ask me about products or routines…"
-              autocomplete="off"
-              required
-            />
-            <button type="submit" id="sendBtn">
-              <span class="material-icons">send</span>
-              <span class="visually-hidden">Send</span>
-            </button>
-          </form>
-        </section>
-      </main>
+      <p>Your AI-powered beauty companion</p>
+    </header>
 
-      <!------- Footer Links ------->
-      <footer class="site-footer">
-        <p>&copy; 2025 Company Name. All rights reserved.</p>
-        <nav>
-          <!-- These URLs are placeholders -->
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Use</a>
-          <a href="#">Contact</a>
-        </nav>
-      </footer>
-    </div>
+    <main>
+      <!-- Shows the user's newest question -->
+      <div id="question-display">
+        Ask me about skincare, makeup, haircare, or fragrances.
+      </div>
+
+      <!-- Chat messages appear here -->
+      <div id="chat-box"></div>
+
+      <div class="input-area">
+        <input
+          id="user-input"
+          type="text"
+          placeholder="Ask a beauty question..."
+        />
+
+        <button id="send-button">Send</button>
+      </div>
+    </main>
+
+    <footer>
+      <p>Powered by AI • L'Oréal Beauty Experience</p>
+    </footer>
 
     <script src="script.js"></script>
   </body>
