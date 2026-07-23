@@ -1,57 +1,102 @@
-// Get HTML elements
-
-const input = document.getElementById("user-input");
-
-const button = document.getElementById("send-button");
-
-const chatBox = document.getElementById("chat-box");
-
-const questionDisplay = document.getElementById("question-display");
+// --------------------------------
+// L'Oréal AI Chatbot
+// Frontend JavaScript
+// --------------------------------
 
 
 
-// Class Cloudflare Worker URL
-// Replace this with the URL provided in your README
+const input =
+
+document.getElementById(
+"user-input"
+);
+
+
+
+const button =
+
+document.getElementById(
+"send-button"
+);
+
+
+
+const chatBox =
+
+document.getElementById(
+"chat-box"
+);
+
+
+
+const questionDisplay =
+
+document.getElementById(
+"question-display"
+);
+
+
+
+
+
+
+// Cloudflare Worker URL
+// Replace with your assigned URL
 
 const workerURL =
-"https://loreal-chatbot.your-subdomain.workers.dev/";
+
+"https://YOUR-WORKER-URL.workers.dev/";
 
 
 
 
-// Stores previous messages
-// This allows the chatbot to remember the conversation
+
+
+
+// Stores conversation history
 
 let conversationHistory = [
 
-    {
 
-        role:"system",
+{
 
-        content:
+role:"system",
 
-        `
-        You are a L'Oréal Beauty Assistant.
+content:
 
-        Only answer questions about:
+`
 
-        - L'Oréal products
-        - skincare
-        - makeup
-        - haircare
-        - fragrances
-        - beauty routines
-        - recommendations
+You are L'Oréal Beauty Assistant.
+
+Your purpose is to help users with:
+
+- L'Oréal skincare products
+- L'Oréal makeup products
+- L'Oréal haircare products
+- L'Oréal fragrances
+- Beauty routines
+- Product recommendations
 
 
-        If a user asks something unrelated,
-        politely explain that you only answer
-        L'Oréal beauty questions.
+You must refuse unrelated questions.
 
-        Be friendly and helpful.
-        `
+If someone asks about coding,
+politics, math, homework,
+or anything unrelated say:
 
-    }
+
+"I'm here to help with L'Oréal beauty products,
+routines, and recommendations.
+Could you ask me a beauty-related question?"
+
+
+Be friendly, professional,
+and personalized.
+
+`
+
+}
+
 
 ];
 
@@ -59,41 +104,60 @@ let conversationHistory = [
 
 
 
-// Adds messages to the chat window
-
-function addMessage(message, sender){
 
 
-    const messageElement =
-    document.createElement("div");
-
-
-    messageElement.textContent = message;
-
-
-    messageElement.classList.add("message");
-
-
-    if(sender === "user"){
-
-        messageElement.classList.add("user-message");
-
-    }
-
-    else{
-
-        messageElement.classList.add("bot-message");
-
-    }
+function addMessage(text,type){
 
 
 
-    chatBox.appendChild(messageElement);
+const message =
+
+document.createElement(
+"div"
+);
 
 
 
-    chatBox.scrollTop =
-    chatBox.scrollHeight;
+message.textContent=text;
+
+
+
+message.classList.add(
+"message"
+);
+
+
+
+if(type==="user"){
+
+
+message.classList.add(
+"user-message"
+);
+
+
+}
+
+else{
+
+
+message.classList.add(
+"bot-message"
+);
+
+
+}
+
+
+
+
+chatBox.appendChild(message);
+
+
+
+chatBox.scrollTop =
+chatBox.scrollHeight;
+
 
 
 }
@@ -103,157 +167,23 @@ function addMessage(message, sender){
 
 
 
-// Sends the user's question to the AI
+
+
 
 async function sendMessage(){
 
 
-    const userQuestion =
-    input.value.trim();
 
+const userText =
 
+input.value.trim();
 
-    if(userQuestion === ""){
 
-        return;
 
-    }
 
+if(userText===""){
 
-
-    // Display user's newest question
-
-    questionDisplay.textContent =
-    "Your question: " + userQuestion;
-
-
-
-    // Show user's message
-
-    addMessage(userQuestion,"user");
-
-
-
-    // Save conversation history
-
-    conversationHistory.push({
-
-        role:"user",
-
-        content:userQuestion
-
-    });
-
-
-
-    input.value="";
-
-
-
-    addMessage(
-        "Thinking...",
-        "bot"
-    );
-
-
-
-
-    try{
-
-
-        const response =
-        await fetch(
-
-            workerURL,
-
-            {
-
-                method:"POST",
-
-                headers:{
-
-                    "Content-Type":"application/json"
-
-                },
-
-
-                body:JSON.stringify({
-
-                    messages:
-                    conversationHistory
-
-                })
-
-            }
-
-        );
-
-
-
-        const data =
-        await response.json();
-
-
-
-
-        // Remove "Thinking..."
-
-        chatBox.lastChild.remove();
-
-
-
-
-        const reply =
-        data.choices[0].message.content;
-
-
-
-
-        addMessage(reply,"bot");
-
-
-
-
-        // Save AI response
-
-        conversationHistory.push({
-
-            role:"assistant",
-
-            content:reply
-
-        });
-
-
-
-    }
-
-
-    catch(error){
-
-
-
-        chatBox.lastChild.remove();
-
-
-
-        addMessage(
-
-            "Sorry, there was an error connecting to the AI.",
-
-            "bot"
-
-        );
-
-
-
-        console.log(error);
-
-
-
-    }
-
-
+return;
 
 }
 
@@ -261,13 +191,98 @@ async function sendMessage(){
 
 
 
-// Button click
 
-button.addEventListener(
+questionDisplay.textContent =
 
-    "click",
+"Your question: " + userText;
 
-    sendMessage
+
+
+
+
+addMessage(
+userText,
+"user"
+);
+
+
+
+
+
+
+conversationHistory.push({
+
+
+role:"user",
+
+content:userText
+
+
+});
+
+
+
+
+
+
+input.value="";
+
+
+
+
+
+addMessage(
+"Thinking...",
+"bot"
+);
+
+
+
+
+
+
+
+try{
+
+
+
+const response =
+
+await fetch(
+
+workerURL,
+
+{
+
+
+method:"POST",
+
+
+headers:{
+
+
+"Content-Type":
+
+"application/json"
+
+
+},
+
+
+
+body:JSON.stringify({
+
+
+messages:
+
+conversationHistory
+
+
+})
+
+
+}
+
 
 );
 
@@ -275,22 +290,133 @@ button.addEventListener(
 
 
 
-// Enter key support
+
+
+const data =
+
+await response.json();
+
+
+
+
+
+
+chatBox.lastChild.remove();
+
+
+
+
+
+
+
+const reply =
+
+data.choices[0]
+.message
+.content;
+
+
+
+
+
+
+addMessage(
+
+reply,
+
+"bot"
+
+);
+
+
+
+
+
+
+conversationHistory.push({
+
+
+role:"assistant",
+
+content:reply
+
+
+});
+
+
+
+
+
+
+}
+
+
+
+catch(error){
+
+
+
+chatBox.lastChild.remove();
+
+
+
+
+addMessage(
+
+"Sorry, there was a connection error.",
+
+"bot"
+
+);
+
+
+
+console.log(error);
+
+
+
+}
+
+
+
+}
+
+
+
+
+
+
+
+
+button.addEventListener(
+
+"click",
+
+sendMessage
+
+);
+
+
+
+
+
 
 input.addEventListener(
 
-    "keypress",
+"keypress",
 
-    function(event){
-
-
-        if(event.key==="Enter"){
-
-            sendMessage();
-
-        }
+function(event){
 
 
-    }
+if(event.key==="Enter"){
+
+
+sendMessage();
+
+
+}
+
+
+}
 
 );
